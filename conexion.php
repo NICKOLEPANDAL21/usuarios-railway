@@ -1,21 +1,21 @@
 <?php
-function conectarDB() {
-    $host = getenv('MYSQLHOST');
-    $port = getenv('MYSQLPORT');
-    $user = getenv('MYSQLUSER');
-    $pass = getenv('MYSQLPASSWORD');
-    $db = getenv('MYSQLDATABASE');
+$hostname = "mysql.railway.internal"; 
+$username = "root";                   
+$password = "IKhnqMkMiERxoYlsQgmqaOEkvZWptWuv"; 
+$database = "railway";               
+$port     = 3306;                     
 
-    if ($host) {
-        $host = $host . ':' . $port;
-    }
+// Crear la conexión usando MySQLi
+$conexion = new mysqli($hostname, $username, $password, $database, $port);
 
-    $conn = mysqli_connect($host, $user, $pass, $db);
-    if (!$conn) {
-        error_log("Error DB: " . mysqli_connect_error());
-        return null;
-    }
-    mysqli_set_charset($conn, "utf8mb4");
-    return $conn;
+// Verificar si hay errores de conexión
+if ($conexion->connect_error) {
+    die(json_encode([
+        "status" => "error",
+        "message" => "Error de conexión: " . $conexion->connect_error
+    ]));
 }
+
+// Configurar codificación de caracteres a UTF-8
+$conexion->set_charset("utf8");
 ?>
